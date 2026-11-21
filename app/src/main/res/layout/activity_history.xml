@@ -22,6 +22,8 @@
             android:textColor="#F5F5F4"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:layout_gravity="center_vertical" />
 
         <!-- Item 13: 🐝 Bee = cloud history (key gate) -->
@@ -50,24 +52,23 @@
 
         <Button
             android:id="@+id/importBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="40dp"
-            android:text="Import CSV"
-            android:textColor="#A1A1AA"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:text="📥"
+            android:textSize="18sp"
+            android:contentDescription="Import CSV"
             android:background="@drawable/bg_btn_ghost"
             android:stateListAnimator="@null"
             android:layout_marginEnd="8dp" />
 
         <Button
             android:id="@+id/exportBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="40dp"
-            android:text="Export CSV"
+            android:text="📤"
+            android:textSize="18sp"
+            android:contentDescription="Export CSV"
             android:textColor="#131300"
-            android:textSize="12sp"
-            android:textStyle="bold"
             android:backgroundTint="#FFC400" />
     </LinearLayout>
 
