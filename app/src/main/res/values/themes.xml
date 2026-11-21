@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.CEIRCheckerPro" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#FFC400</item>
+        <item name="colorPrimaryVariant">#7A5F00</item>
+        <item name="colorOnPrimary">#0B0F19</item>
+        <item name="colorSecondary">#FFC400</item>
+        <item name="colorOnSecondary">#0B0F19</item>
+        <item name="android:statusBarColor">#0B0F19</item>
+        <item name="android:navigationBarColor">#0B0F19</item>
+        <item name="android:windowBackground">#0B0F19</item>
+    </style>
+</resources>

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- v6: no-scroll layout. Root is a vertical LinearLayout (not ScrollView).
+     Camera card is a fixed 300dp (idle/scanning); ScannerActivity compacts it
+     to 150dp when results show so IMEI rows + Check CEIR + bottom buttons all
+     fit without scrolling. A weighted Space pushes Start/History/Reset to the
+     very bottom of the screen. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0A0A0B"
+    android:padding="16dp">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CEIR "
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scanner"
+            android:textColor="#FFC400"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Developed by ဖီးနစ် (ထူးကြီး)"
+        android:textColor="#71717A"
+        android:textSize="13sp"
+        android:layout_marginTop="2dp" />
+
+    <!-- OCR / Barcode segmented toggle -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_toggle_container_dark"
+        android:padding="4dp"
+        android:layout_marginTop="12dp">
+
+        <TextView
+            android:id="@+id/modeBtn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="OCR"
+            android:textColor="#FFC400"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_toggle_selected" />
+
+        <TextView
+            android:id="@+id/barcodeBtn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="BARCODE"
+            android:textColor="#71717A"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
+
+    <!-- Camera card: fixed 300dp (idle/scanning). ScannerActivity compacts
+         it to 150dp when scan results appear. -->
+    <FrameLayout
+        android:id="@+id/cameraFrame"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_camera_card_dark"
+        android:foreground="@drawable/bg_camera_frame_border"
+        android:clipToOutline="true">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- v5 scan band: white wide-short frame, dim outside, laser up-down -->
+        <com.myokooo.ceir.ScanBandView
+            android:id="@+id/scanBand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Camera off: plain black -->
+        <FrameLayout
+            android:id="@+id/cameraOffPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000" />
+
+        <!-- LIVE badge -->
+        <LinearLayout
+            android:id="@+id/liveIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_live_badge_dark"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/bg_live_dot_dark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="LIVE"
+                android:textColor="#131300"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_hint_pill_dark"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="7dp"
+            android:text="IMEI ကို band ထဲမှာ ထားပါ"
+            android:textColor="#F5F5F4"
+            android:textSize="12sp" />
+    </FrameLayout>
+
+    <!-- Spacer: pushes Start / History / Reset to the very bottom -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Start / Stop / Scan Again toggle: standalone button BELOW the camera card -->
+    <Button
+        android:id="@+id/startBtn"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        android:text="▶ Start Scanning"
+        android:textColor="#131300"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:background="@drawable/bg_btn_accent"
+        android:stateListAnimator="@null" />
+
+    <!-- Scanned card -->
+    <LinearLayout
+        android:id="@+id/imeiResultArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_scanned_card"
+        android:padding="12dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SCANNED"
+                android:textColor="#71717A"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/copyBothBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Copy both"
+                android:textColor="#A1A1AA"
+                android:textSize="12sp"
+                android:background="@drawable/bg_btn_ghost"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+
+        <!-- IMEI 1 row: single-line mono + own Copy button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_imei_row_dark"
+            android:padding="10dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#FFC400"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_num_badge" />
+
+            <TextView
+                android:id="@+id/imei1Text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="—"
+                android:textColor="#F5F5F4"
+                android:fontFamily="monospace"
+                android:textStyle="bold"
+                android:singleLine="true"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="10sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeStepGranularity="1sp" />
+
+            <Button
+                android:id="@+id/copyImei1Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:text="📋 Copy"
+                android:textColor="#A1A1AA"
+                android:textSize="12sp"
+                android:background="@drawable/bg_btn_ghost"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+
+        <!-- IMEI 2 row: single-line mono + own Copy button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_imei_row_dark"
+            android:padding="10dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="#FFC400"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_num_badge" />
+
+            <TextView
+                android:id="@+id/imei2Text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="—"
+                android:textColor="#F5F5F4"
+                android:fontFamily="monospace"
+                android:textStyle="bold"
+                android:singleLine="true"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="10sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeStepGranularity="1sp" />
+
+            <Button
+                android:id="@+id/copyImei2Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:text="📋 Copy"
+                android:textColor="#A1A1AA"
+                android:textSize="12sp"
+                android:background="@drawable/bg_btn_ghost"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0/2 ✓"
+            android:textColor="#71717A"
+            android:textSize="13sp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- Check CEIR: primary -->
+    <Button
+        android:id="@+id/checkCeirBtn"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        android:text="Check CEIR →"
+        android:textColor="#131300"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:background="@drawable/bg_btn_accent"
+        android:stateListAnimator="@null"
+        android:visibility="gone" />
+
+    <!-- History / Reset: quiet secondary -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@+id/historyBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:text="🕘 History"
+            android:textColor="#A1A1AA"
+            android:textSize="14sp"
+            android:background="@drawable/bg_btn_ghost"
+            android:stateListAnimator="@null" />
+
+        <Button
+            android:id="@+id/resetBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:text="↺ Reset"
+            android:textColor="#A1A1AA"
+            android:textSize="14sp"
+            android:background="@drawable/bg_btn_ghost"
+            android:stateListAnimator="@null" />
+    </LinearLayout>
+</LinearLayout>

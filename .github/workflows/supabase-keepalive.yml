@@ -1,0 +1,46 @@
+name: Keep Supabase Awake
+
+# Free-tier Supabase projects pause after 7 days of inactivity.
+# This workflow pings the DB every 6 hours so it never goes idle.
+# GitHub auto-disables schedules after 60 days without repo activity,
+# so on the 1st of each month the workflow commits a heartbeat file
+# to itself — the schedule then stays alive forever with no manual pushes.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # ping Supabase every 6 hours
+    - cron: "0 0 1 * *"      # heartbeat commit, 1st of each month
+  workflow_dispatch:        # manual trigger (ping only, no commit)
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/scans?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}")
+          echo "Supabase ping -> HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "Ping failed, Supabase may be unreachable"
+            exit 1
+          fi
+
+      - name: Checkout
+        if: github.event.schedule == '0 0 1 * *'
+        uses: actions/checkout@v4
+
+      - name: Heartbeat commit (keeps this schedule alive)
+        if: github.event.schedule == '0 0 1 * *'
+        run: |
+          git config user.name "supabase-keepalive"
+          git config user.email "supabase-keepalive@users.noreply.github.com"
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .github/keepalive-heartbeat.txt
+          git add .github/keepalive-heartbeat.txt
+          git diff --cached --quiet || git commit -m "chore: keepalive heartbeat"
+          git push

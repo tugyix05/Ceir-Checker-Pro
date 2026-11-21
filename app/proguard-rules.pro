@@ -1,0 +1,3 @@
+-keep class com.myokooo.ceir.** { *; }
+-keep class io.github.jan.supabase.** { *; }
+-keep class io.ktor.** { *; }

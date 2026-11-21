@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Item 13 — 🐝 cloud history. Theme #1 (yellow/black). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0A0A0B">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:background="#141416">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🐝 Cloud History"
+            android:textColor="#F5F5F4"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <!-- Key gate: shown when locked -->
+    <LinearLayout
+        android:id="@+id/lockView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🔒 Key ထည့်ပါ"
+            android:textColor="#F5F5F4"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/lockHintText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cloud history ကြည့်ဖို့ key လိုတယ်။\nKey ကို ဘယ်နေရာမှာမှ သိမ်းမထားဘူး။"
+            android:textColor="#71717A"
+            android:textSize="12sp"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/keyInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Key"
+            android:textColor="#F5F5F4"
+            android:textColorHint="#52525B"
+            android:inputType="textPassword"
+            android:importantForAutofill="no"
+            android:background="@drawable/bg_imei_row_dark"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/keyConfirmInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Key အတည်ပြုပါ"
+            android:textColor="#F5F5F4"
+            android:textColorHint="#52525B"
+            android:inputType="textPassword"
+            android:importantForAutofill="no"
+            android:background="@drawable/bg_imei_row_dark"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/unlockBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Unlock"
+            android:textColor="#131300"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#FFC400"
+            android:stateListAnimator="@null" />
+
+        <TextView
+            android:id="@+id/lockErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#F87171"
+            android:textSize="12sp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Decrypted list: shown when unlocked -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cloudList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/cloudEmptyText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="40dp"
+        android:text="Cloud history မရှိသေးပါ"
+        android:textColor="#71717A"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/cloudStatusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="12dp"
+        android:textColor="#71717A"
+        android:textSize="12sp"
+        android:visibility="gone" />
+</LinearLayout>
